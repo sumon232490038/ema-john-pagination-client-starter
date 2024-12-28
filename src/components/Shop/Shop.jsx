@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {
-  addToDb,
-  deleteShoppingCart,
-  getShoppingCart,
-} from "../../utilities/fakedb";
+import { addToDb, deleteShoppingCart } from "../../utilities/fakedb";
 import Cart from "../Cart/Cart";
 import Product from "../Product/Product";
 import "./Shop.css";
 import { Link, useLoaderData } from "react-router-dom";
 
 const Shop = () => {
+  const cartData = useLoaderData();
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
-  const { count } = useLoaderData();
+  const [cart, setCart] = useState(cartData);
+  // const { count } = useLoaderData();
+  const [count, setCount] = useState(0);
+  // const count = 76;
+  console.log(cartData);
   //   console.log(count);
   const [itemsPerPage, setitemsPerPage] = useState(10);
   const [currentPageNow, setCurrentPageNow] = useState(0);
@@ -20,6 +20,11 @@ const Shop = () => {
   const totalPage = Math.ceil(count / itemsPerPage);
 
   const pages = [...Array(totalPage).keys()];
+  useEffect(() => {
+    fetch("http://localhost:5000/productsCounts")
+      .then((res) => res.json())
+      .then((data) => setCount(data.count));
+  }, []);
 
   useEffect(() => {
     fetch(
@@ -29,25 +34,25 @@ const Shop = () => {
       .then((data) => setProducts(data));
   }, [currentPageNow, itemsPerPage]);
 
-  useEffect(() => {
-    const storedCart = getShoppingCart();
-    const savedCart = [];
-    // step 1: get id of the addedProduct
-    for (const id in storedCart) {
-      // step 2: get product from products state by using id
-      const addedProduct = products.find((product) => product._id === id);
-      if (addedProduct) {
-        // step 3: add quantity
-        const quantity = storedCart[id];
-        addedProduct.quantity = quantity;
-        // step 4: add the added product to the saved cart
-        savedCart.push(addedProduct);
-      }
-      // console.log('added Product', addedProduct)
-    }
-    // step 5: set the cart
-    setCart(savedCart);
-  }, [products]);
+  // useEffect(() => {
+  //   const storedCart = getShoppingCart();
+  //   const savedCart = [];
+  //   // step 1: get id of the addedProduct
+  //   for (const id in storedCart) {
+  //     // step 2: get product from products state by using id
+  //     const addedProduct = products.find((product) => product._id === id);
+  //     if (addedProduct) {
+  //       // step 3: add quantity
+  //       const quantity = storedCart[id];
+  //       addedProduct.quantity = quantity;
+  //       // step 4: add the added product to the saved cart
+  //       savedCart.push(addedProduct);
+  //     }
+  //     // console.log('added Product', addedProduct)
+  //   }
+  //   // step 5: set the cart
+  //   setCart(savedCart);
+  // }, [products]);
 
   const handlePages = (e) => {
     console.log(e.target.value);
