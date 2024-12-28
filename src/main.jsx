@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Shop></Shop>,
-        // loader: () => fetch("http://localhost:5000/productsCounts"),
+        // loader: () => fetch("https://ema-john-pagination-server-starter-pink.vercel.app/productsCounts"),
         loader: cartProductsLoader,
       },
       {

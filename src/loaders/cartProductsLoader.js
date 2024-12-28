@@ -4,13 +4,16 @@ const cartProductsLoader = async () => {
   const storedCart = getShoppingCart();
   const storedCartKeys = Object.keys(storedCart);
 
-  const loadedProducts = await fetch("http://localhost:5000/productsById", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(storedCartKeys),
-  });
+  const loadedProducts = await fetch(
+    "https://ema-john-pagination-server-starter-pink.vercel.app/productsById",
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(storedCartKeys),
+    }
+  );
   const products = await loadedProducts.json();
 
   // if cart data is in database, you have to use async await
